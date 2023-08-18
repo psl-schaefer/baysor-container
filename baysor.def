@@ -22,9 +22,7 @@ From: julia:1.9-bookworm
     export JULIA_DEPOT_PATH=/app
 
     # See: https://docs.julialang.org/en/v1/devdocs/sysimg/#Specifying-multiple-system-image-targets
-    # export JULIA_CPU_TARGET="generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
-
-    export JULIA_CPU_TARGET="x86-64"
+    export JULIA_CPU_TARGET="generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
 
     julia -e 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/kharchenkolab/Baysor.git")); Pkg.build()'
 
