@@ -1,0 +1,31 @@
+name: Apptainer Build Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-test-container:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    container:
+        image: quay.io/singularity/singularity:v3.10.4
+        options: --privileged
+
+    name: Build Container
+    steps:
+
+      - name: Check out code for the container builds
+        uses: actions/checkout@v2
+
+      - name: Build Container
+        run: |
+           singularity build baysor.sif baysor.def
+
+      - name: Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: Apptainer
+          path: baysor.sif
