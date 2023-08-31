@@ -1,13 +1,12 @@
-name: Apptainer Build Deploy
+name: Apptainer Build
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
 
 jobs:
-  build-test-container:
+  build-apptainer:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,9 +22,9 @@ jobs:
       - name: Check out code for the container builds
         uses: actions/checkout@v2
 
-      # - name: Build Container
-      #   run: |
-      #      singularity build baysor.sif baysor.def
+      - name: Build Container
+        run: |
+           singularity build baysor.sif baysor.def
 
       # - name: Use the Upload Artifact GitHub Action
       #   uses: actions/upload-artifact@v2
@@ -33,10 +32,10 @@ jobs:
       #     name: Apptainer
       #     path: baysor.sif
 
-      - name: Upload Container
-        run: |
-          singularity remote add Sylabs cloud.sylabs.io 
-          singularity remote use Sylabs
-          singularity push -U baysor.sif library://mheeg/spatial-tools/baysor:latest     
-        env:
-          SINGULARITY_DOCKER_PASSWORD: ${{ secrets.SYLABS_AUTH_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            baysor.sif
+
+      
