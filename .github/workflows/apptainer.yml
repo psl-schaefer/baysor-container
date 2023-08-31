@@ -8,9 +8,6 @@ on:
 jobs:
   build-apptainer:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     container:
         image: quay.io/singularity/singularity:v3.10.4
