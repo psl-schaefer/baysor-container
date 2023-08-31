@@ -10,7 +10,8 @@ This image can be used with docker or singularity. For example:
 
       # Use the images from docker.io
       docker run maximilianheeg/baysor:v0.6.2 run --help  
-      singularity run docker://maximilianheeg/baysor:v0.6.2 preview --help
+      # --no-home might be required to prevent: Bind mount '/home/USER => /home/USER' overlaps container CWD 
+      singularity run --no-home docker://maximilianheeg/baysor:v0.6.2 preview --help
 
       # Or a locally downloaded sif file
       singularity run baysor.sif run --help
