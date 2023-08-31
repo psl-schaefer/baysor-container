@@ -18,10 +18,10 @@ jobs:
     steps:
       - name: Install singularity
         run: |
-          sudo yum update -y && \
-          sudo yum install -y epel-release && \
-          sudo yum update -y && \
-          sudo yum install -y singularity
+          yum update -y && \
+          yum install -y epel-release && \
+          yum update -y && \
+          yum install -y singularity
 
       - name: Check out code for the container builds
         uses: actions/checkout@v2
