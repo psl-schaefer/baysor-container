@@ -11,11 +11,17 @@ jobs:
       packages: write
 
     container:
-        image: quay.io/singularity/singularity:v3.10.4
+        image: centos:7
         options: --privileged
 
     name: Build Container
     steps:
+      - name: Install singularity
+        run: |
+          sudo yum update -y && \
+          sudo yum install -y epel-release && \
+          sudo yum update -y && \
+          sudo yum install -y singularity
 
       - name: Check out code for the container builds
         uses: actions/checkout@v2
