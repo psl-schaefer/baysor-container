@@ -2,6 +2,9 @@ name: Apptainer Build Deploy
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   build-test-container:
@@ -11,14 +14,11 @@ jobs:
       packages: write
 
     container:
-        image: centos:7
+        image: quay.io/singularity/singularity:v3.10.4
         options: --privileged
 
     name: Build Container
     steps:
-      - name: Install singularity
-        run: |
-          yum install -y https://github.com/sylabs/singularity/releases/download/v3.11.4/singularity-ce-3.11.4-1.el7.x86_64.rpm
 
       - name: Check out code for the container builds
         uses: actions/checkout@v2
@@ -27,8 +27,14 @@ jobs:
         run: |
            singularity build baysor.sif baysor.def
 
-      - name: Use the Upload Artifact GitHub Action
-        uses: actions/upload-artifact@v2
-        with: 
-          name: Apptainer
-          path: baysor.sif
+      # - name: Use the Upload Artifact GitHub Action
+      #   uses: actions/upload-artifact@v2
+      #   with: 
+      #     name: Apptainer
+      #     path: baysor.sif
+
+      - name: Upload Container
+        run: |
+          singularity remote add Sylabs cloud.sylabs.io 
+          singularity remote use Sylabs
+          singularity push -U baysor.sif library://mheeg/spatial-tools/baysor:latest     

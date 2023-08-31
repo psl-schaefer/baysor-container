@@ -1,33 +1,22 @@
 Bootstrap: docker
-From: julia:1.9-bookworm
+From: centos:7
 
 %runscript
-    /app/bin/baysor
+    /app/bin/baysor --help
 
 %post
-    # Install gcc
-    # Needed for compiling baysor
-    apt update
-    apt install gcc -y
+    # Download Baysor
+    yum install -y unzip
 
-    ###############################
-    # Download and install baysor #
-    ###############################
-    export JULIA_NUM_THREADS=4
+    mkdir /app
+    cd /app
 
-    # We don't want to install the packages in the default directory.
-    # usually this would be ~/.julia, this would result in /root/.julia
-    # during the build process.
-    # See: https://docs.julialang.org/en/v1/manual/environment-variables/#JULIA_DEPOT_PATH
-    export JULIA_DEPOT_PATH=/app
-
-    # See: https://docs.julialang.org/en/v1/devdocs/sysimg/#Specifying-multiple-system-image-targets
-    export JULIA_CPU_TARGET="generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
-
-    julia -e 'using Pkg; Pkg.add(PackageSpec(url="https://github.com/kharchenkolab/Baysor.git")); Pkg.build()'
-
-    # Run baysor to download the MKL files
-    /app/bin/baysor --help
+    curl -O -L https://github.com/kharchenkolab/Baysor/releases/download/v0.6.2/baysor-x86_x64-linux-v0.6.2_build.zip
+    unzip baysor-x86_x64-linux-v0.6.2_build.zip
+    mv bin unzip
+    mv unzip/baysor/* .
+    rm -rf unzip
+    rm baysor-x86_x64-linux-v0.6.2_build.zip
 
 %test
     # Small test
@@ -35,7 +24,6 @@ From: julia:1.9-bookworm
 
 %environment
     export PATH=$PATH:/app/bin
-    export JULIA_DEPOT_PATH=/app
 
 
 %labels
@@ -46,6 +34,7 @@ From: julia:1.9-bookworm
     Run Baysor in a container
     ---------------------------
     Use with apptainer run baysor.sif
+    Or apptainer exec baysor.sif baysor run --help
     Create with apptainer build baysor.sif baysor.default
     Test with apptainer run-test baysor.sif
     Inspect with apptainer inspect baysor.sif
