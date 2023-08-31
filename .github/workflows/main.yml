@@ -18,11 +18,7 @@ jobs:
     steps:
       - name: Install singularity
         run: |
-          yum update -y && \
-          yum install -y epel-release && \
-          yum install -y wget && \
-          wget https://github.com/sylabs/singularity/releases/download/v3.11.4/singularity-ce-3.11.4-1.el7.x86_64.rpm && \
-          rpm -i singularity-ce-3.11.4-1.el7.x86_64.rpm
+          yum install -y https://github.com/sylabs/singularity/releases/download/v3.11.4/singularity-ce-3.11.4-1.el7.x86_64.rpm
 
       - name: Check out code for the container builds
         uses: actions/checkout@v2
