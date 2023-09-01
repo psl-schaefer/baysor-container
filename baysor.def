@@ -2,13 +2,16 @@ Bootstrap: docker
 From: centos:7
 
 %runscript
-    /app/bin/baysor --help
+    /app/bin/baysor
+
+
+%files
+    test.csv /app/
 
 %post
     # Download Baysor
     yum install -y unzip
 
-    mkdir /app
     cd /app
 
     curl -O -L https://github.com/kharchenkolab/Baysor/releases/download/v0.6.2/baysor-x86_x64-linux-v0.6.2_build.zip
@@ -17,6 +20,20 @@ From: centos:7
     mv unzip/baysor/* .
     rm -rf unzip
     rm baysor-x86_x64-linux-v0.6.2_build.zip
+
+    # Run it once
+    mkdir test && \
+    /app/bin/baysor run \
+        -x x_location \
+        -y y_location \
+        -z z_location \
+        -g feature_name \
+        -m 30 \
+        -o test/ \
+        -p --prior-segmentation-confidence 0.5 \
+        test.csv \
+        :cell_id && \
+    rm -rf test*
 
 %test
     # Small test

@@ -7,6 +7,19 @@ RUN mv bin unzip
 RUN mv unzip/baysor/* . 
 RUN rm -rf unzip 
 RUN rm baysor-x86_x64-linux-v0.6.2_build.zip
+COPY test.csv .
+RUN mkdir test && \
+    /app/bin/baysor run \
+        -x x_location \
+        -y y_location \
+        -z z_location \
+        -g feature_name \
+        -m 30 \
+        -o test/ \
+        -p --prior-segmentation-confidence 0.5 \
+        test.csv \
+        :cell_id && \
+    rm -rf test*
 ENTRYPOINT ["/app/bin/baysor"]
 CMD ["--help"]
 
