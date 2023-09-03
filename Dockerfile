@@ -27,5 +27,6 @@ CMD ["--help"]
 FROM centos:7
 WORKDIR /app
 COPY --from=build /app /app
+ENV PATH="${PATH}:/app/bin"
 ENTRYPOINT ["/app/bin/baysor"]
 CMD ["--help"]
