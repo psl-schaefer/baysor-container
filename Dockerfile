@@ -1,12 +1,12 @@
 FROM centos:7 AS build
 WORKDIR /app
 RUN yum install -y unzip 
-RUN curl -O -L https://github.com/kharchenkolab/Baysor/releases/download/v0.6.2/baysor-x86_x64-linux-v0.6.2_build.zip 
-RUN unzip baysor-x86_x64-linux-v0.6.2_build.zip 
+RUN curl -O -L https://github.com/kharchenkolab/Baysor/releases/download/v0.7.1/baysor-x86_x64-linux-v0.7.1_build.zip
+RUN unzip baysor-x86_x64-linux-v0.7.1_build.zip 
 RUN mv bin unzip 
 RUN mv unzip/baysor/* . 
 RUN rm -rf unzip 
-RUN rm baysor-x86_x64-linux-v0.6.2_build.zip
+RUN rm baysor-x86_x64-linux-v0.7.1_build.zip
 COPY test.csv .
 RUN mkdir test && \
     /app/bin/baysor run \
